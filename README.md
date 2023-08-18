@@ -1,4 +1,4 @@
-# CodeQL Selective Analysis on Pull Requests
+# CodeQL selective analysis on Pull Requests
 
 This repo contains an example workflow file demonstrating how to make `CodeQL` a required status check for Pull Requests, but to skip the analysis in the case that only a certain subset of files are modified (for example, documentation files).
 
