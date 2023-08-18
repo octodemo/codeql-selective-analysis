@@ -1,6 +1,18 @@
 # CodeQL Selective Analysis on Pull Requests
 
-This repo contains an example workflow file demonstrating how to make CodeQL a required status check for Pull Requests, but to skip it in the case that only a certain subset of files are modified (for example, documentation files).
+This repo contains an example workflow file demonstrating how to make `CodeQL` a required status check for Pull Requests, but to skip the analysis in the case that only a certain subset of files are modified (for example, documentation files).
+
+This solution works by skipping the CodeQL Analysis phase if only certain files are modified, and manually setting the relevant required status.
+
+## Demo
+
+ * PR https://github.com/octodemo/codeql-selective-analysis/pull/1 only changes documentation, and the analysis is skipped, but the required check is still satisfied.
+  * PR https://github.com/octodemo/codeql-selective-analysis/pull/2 modifies the code, and runs the analysis.
+## Pre-requisite
+
+In order to manually set the required status, we first need to modify the relevant "Branch Protection" rule to specify that the status is permitted to come from any source:
+
+![image](https://github.com/octodemo/codeql-selective-analysis/assets/5377966/3d54891f-13fd-40fe-8998-68c9b7de69d9)
 
 ## Usage
 
@@ -23,6 +35,8 @@ The [sample workflow](.github/workflows/codeql-analysis.yml) demonstrates the ba
 ```
 
 This uses the `dorny/paths-filter` action to identify the modified files and determine if there are any changes outside the "docs/" directory, the set a `changes_outside_docs` output from the job to be `true` if there are changes outside the docs directory and `false` if not. `dorny/paths-filter` provides a general globbing syntax based on https://github.com/micromatch/picomatch.
+
+> Note: it is important you do not exclude any files which may influence how the source code is analyzed
 
 If you prefer not to add a third-dependency, this list of modified files can instead be fetched using the GitHub API ([List pull requests files](https://docs.github.com/en/free-pro-team@latest/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files)) and manually parsed for the relevant changed.
 
